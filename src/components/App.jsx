@@ -10,12 +10,18 @@ import { Modal } from './Modal/Modal';
 // import css from './App.module.css';
 
 export class App extends Component {
-  state = {};
+  state = {
+    inputSearch: '',
+  };
+
+  handleFormSubmit = inputSearch => {
+    this.setState({ inputSearch });
+  };
 
   render() {
     return (
       <div>
-        <Searchbar />
+        <Searchbar onSubmit={this.handleFormSubmit} />
 
         <Loader />
 
