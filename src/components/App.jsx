@@ -10,29 +10,52 @@ import { Loader } from './Loader/Loader';
 import { Button } from './Button/Button';
 import { Modal } from './Modal/Modal';
 
+import { getImages } from 'api-service/getImages';
+
 // import css from './App.module.css';
 
 export class App extends Component {
   state = {
     inputSearch: '',
+    hits: [],
+    id: '',
+    webformatURL: '',
+    largeImageURL: '',
+    page: 1,
   };
+
+  componentDidUpdate(_, prevState) {
+    if (this.state.inputSearch !== prevState.inputSearch) {
+      getImages(this.state.inputSearch)
+        .then(res => res.json())
+        .then(hits => this.setState(hits));
+    }
+  }
 
   handleFormSubmit = inputSearch => {
     this.setState({ inputSearch });
   };
 
+  handleLoadMore = () => {
+    this.setState(prevState => ({ page: prevState.page + 1 }));
+  };
+
   render() {
+    const { hits } = this.state;
+
     return (
       <div>
         <Searchbar onSubmit={this.handleFormSubmit} />
 
         <Loader />
 
-        <ImageGallery>
-          <ImageGalleryItem />
-        </ImageGallery>
+        {hits && (
+          <ImageGallery>
+            <ImageGalleryItem images={hits} />
+          </ImageGallery>
+        )}
 
-        <Button />
+        <Button onBtnClick={() => this.handleLoadMore()} />
 
         <Modal />
 

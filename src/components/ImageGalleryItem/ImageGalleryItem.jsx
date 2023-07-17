@@ -1,14 +1,15 @@
-import { Component } from 'react';
-// import PropTypes from 'prop-types';
-
 // import css from './ImageGalleryItem.module.css';
 
-export class ImageGalleryItem extends Component {
-  state = {};
-
-  render() {
-    return <></>;
-  }
-}
-
-// ImageGalleryItem.propTypes = {};
+export const ImageGalleryItem = ({ images }) => {
+  return (
+    <>
+      {images.map(({ id, webformatURL }) => {
+        return (
+          <li key={id}>
+            <img src={webformatURL} alt="something of search" />
+          </li>
+        );
+      })}
+    </>
+  );
+};
