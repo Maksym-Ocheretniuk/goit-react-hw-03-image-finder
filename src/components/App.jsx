@@ -1,5 +1,8 @@
 import { Component } from 'react';
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { ImageGalleryItem } from './ImageGalleryItem/ImageGalleryItem';
@@ -32,6 +35,8 @@ export class App extends Component {
         <Button />
 
         <Modal />
+
+        <ToastContainer autoClose={4000} theme="colored" />
       </div>
     );
   }
