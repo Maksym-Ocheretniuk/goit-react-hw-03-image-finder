@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { ImSearch } from 'react-icons/im';
 import { toast } from 'react-toastify';
 
-// import css from './Searchbar.module.css';
+import css from './Searchbar.module.css';
 
 export class Searchbar extends Component {
   state = {
@@ -25,9 +25,9 @@ export class Searchbar extends Component {
 
   render() {
     return (
-      <header>
-        <form onSubmit={this.handleSubmit}>
-          <button type="submit">
+      <header className={css.searchBar}>
+        <form onSubmit={this.handleSubmit} className={css.searchForm}>
+          <button type="submit" className={css.searchButton}>
             <ImSearch />
           </button>
           <input
@@ -37,6 +37,7 @@ export class Searchbar extends Component {
             placeholder="Search images and photos"
             value={this.state.inputSearch}
             onChange={this.handleInputChange}
+            className={css.searchInput}
           />
         </form>
       </header>
