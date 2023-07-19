@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 
-// import css from './Modal.module.css';
+import css from './Modal.module.css';
 
 export class Modal extends Component {
   // state = {};
@@ -28,8 +28,8 @@ export class Modal extends Component {
 
   render() {
     return (
-      <div onClick={this.handleBcgClick}>
-        <div>{this.props.children}</div>
+      <div onClick={this.handleBcgClick} className={css.modal__over}>
+        <div className={css.modal__window}>{this.props.children}</div>
       </div>
     );
   }
