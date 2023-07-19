@@ -13,7 +13,7 @@ import { Modal } from './Modal/Modal';
 
 import { getImages } from 'api-service/getImages';
 
-// import css from './App.module.css';
+import css from './App.module.css';
 
 export class App extends Component {
   state = {
@@ -93,7 +93,7 @@ export class App extends Component {
       this.state;
 
     return (
-      <div>
+      <div className={css.app}>
         <Searchbar onSubmit={this.handleFormSubmit} />
 
         {loading && (
