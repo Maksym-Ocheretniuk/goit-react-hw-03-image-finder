@@ -65,7 +65,7 @@ export class App extends Component {
   }
 
   handleFormSubmit = inputSearch => {
-    this.setState({ inputSearch });
+    this.setState({ inputSearch, page: 1, hits: [] });
   };
 
   handleLoadMore = () => {
