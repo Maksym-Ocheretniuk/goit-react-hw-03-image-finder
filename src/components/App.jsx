@@ -1,6 +1,6 @@
 import { Component } from 'react';
 
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { Searchbar } from './Searchbar/Searchbar';
@@ -22,13 +22,45 @@ export class App extends Component {
     webformatURL: '',
     largeImageURL: '',
     page: 1,
+    loading: false,
+    error: null,
   };
 
   componentDidUpdate(_, prevState) {
-    if (this.state.inputSearch !== prevState.inputSearch) {
-      getImages(this.state.inputSearch)
-        .then(res => res.json())
-        .then(hits => this.setState(hits));
+    const { inputSearch, page } = this.state;
+
+    if (inputSearch !== prevState.inputSearch || page !== prevState.page) {
+      this.setState({ loading: true });
+
+      getImages(inputSearch, page)
+        .then(res => {
+          if (res.ok) {
+            return res.json();
+          }
+          return Promise.reject(new Error(`No ${inputSearch}`));
+        })
+        .then(data => {
+          if (!data.totalHits) {
+            return toast.error(`No pictures for ${inputSearch}`);
+          }
+
+          const totalPages = Math.ceil(data.totalHits / 12);
+
+          if (page === totalPages) {
+            this.setState({ endOfCollection: true });
+            return toast.error('No more pictures');
+          }
+
+          this.setState(prevState => ({
+            hits: [...prevState.hits, ...data.hits],
+            endOfCollection: false,
+          }));
+        })
+        .catch(error => {
+          console.log(error);
+          return toast.error(`Something wrong`);
+        })
+        .finally(() => this.setState({ loading: false }));
     }
   }
 
@@ -41,7 +73,7 @@ export class App extends Component {
   };
 
   render() {
-    const { hits } = this.state;
+    const { hits, loading } = this.state;
 
     return (
       <div>
@@ -55,7 +87,7 @@ export class App extends Component {
           </ImageGallery>
         )}
 
-        <Button onBtnClick={() => this.handleLoadMore()} />
+        {hits.length > 0 && <Button onBtnClick={() => this.handleLoadMore()} />}
 
         <Modal />
 
