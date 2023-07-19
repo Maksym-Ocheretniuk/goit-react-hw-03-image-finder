@@ -12,6 +12,10 @@ body {
   background-color: rgb(166, 216, 216);
 }
 
+body._lock {
+  overflow: hidden;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
