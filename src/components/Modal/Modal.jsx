@@ -1,14 +1,41 @@
 import { Component } from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 // import css from './Modal.module.css';
 
 export class Modal extends Component {
-  state = {};
+  // state = {};
+
+  componentDidMount() {
+    window.addEventListener('keydown', this.handleEscapeClose);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.handleEscapeClose);
+  }
+
+  handleEscapeClose = e => {
+    if (e.code === 'Escape') {
+      this.props.onClose();
+    }
+  };
+
+  handleBcgClick = e => {
+    if (e.currentTarget === e.target) {
+      this.props.onClose();
+    }
+  };
 
   render() {
-    return <></>;
+    return (
+      <div onClick={this.handleBcgClick}>
+        <div>{this.props.children}</div>
+      </div>
+    );
   }
 }
 
-// Modal.propTypes = {};
+Modal.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  children: PropTypes.node.isRequired,
+};

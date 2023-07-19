@@ -2,6 +2,7 @@ import { Component } from 'react';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { ThreeCircles } from 'react-loader-spinner';
 
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
@@ -19,11 +20,13 @@ export class App extends Component {
     inputSearch: '',
     hits: [],
     id: '',
-    webformatURL: '',
-    largeImageURL: '',
     page: 1,
     loading: false,
-    error: null,
+    modalImageURL: '',
+    showModal: false,
+    webformatURL: '',
+    largeImageURL: '',
+    endOfCollection: false,
   };
 
   componentDidUpdate(_, prevState) {
@@ -72,24 +75,62 @@ export class App extends Component {
     this.setState(prevState => ({ page: prevState.page + 1 }));
   };
 
+  // Modal
+  openModal = imageURL => {
+    this.setState({ showModal: true, modalImageURL: imageURL });
+  };
+
+  closeModal = () => {
+    this.setState({ showModal: false, modalImageURL: '' });
+  };
+
+  handleImageClick = imageURL => {
+    this.setState({ showModal: true, modalImageURL: imageURL });
+  };
+
   render() {
-    const { hits, loading } = this.state;
+    const { hits, loading, showModal, modalImageURL, endOfCollection } =
+      this.state;
 
     return (
       <div>
         <Searchbar onSubmit={this.handleFormSubmit} />
 
-        <Loader />
+        {loading && (
+          <Loader>
+            <ThreeCircles
+              height="100"
+              width="100"
+              color="#4fa94d"
+              wrapperStyle={{}}
+              wrapperClass=""
+              visible={true}
+              ariaLabel="three-circles-rotating"
+              outerCircleColor=""
+              innerCircleColor=""
+              middleCircleColor=""
+            />
+          </Loader>
+        )}
 
         {hits && (
           <ImageGallery>
-            <ImageGalleryItem images={hits} />
+            <ImageGalleryItem
+              images={hits}
+              onImageClick={this.handleImageClick}
+            />
           </ImageGallery>
         )}
 
-        {hits.length > 0 && <Button onBtnClick={() => this.handleLoadMore()} />}
+        {hits.length > 0 && !endOfCollection && (
+          <Button onBtnClick={() => this.handleLoadMore()} />
+        )}
 
-        <Modal />
+        {showModal && (
+          <Modal onClose={this.closeModal}>
+            <img src={modalImageURL} alt="Modal Window" />
+          </Modal>
+        )}
 
         <ToastContainer autoClose={4000} theme="colored" />
       </div>
